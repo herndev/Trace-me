@@ -74,3 +74,37 @@ Widget inputField({@required controller, @required validator, @required icon, @r
     ),
   );
 }
+
+
+Widget disabledField({@required controller, @required validator, @required icon, @required hint, type: TextInputType.text}) {
+  return TextFormField(
+    controller: controller,
+    validator: validator,
+    keyboardType: type,
+    enabled: false,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    decoration: InputDecoration(
+      prefixIcon: icon,
+      hintText: hint,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+  );
+}
+
+
+Widget textAreaField({@required controller, @required hint, @required max, @required validator}) {
+  return TextFormField(
+    controller: controller,
+    validator: validator,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    maxLines: max,
+    decoration: InputDecoration(
+      hintText: hint,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+  );
+}

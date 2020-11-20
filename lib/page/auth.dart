@@ -30,12 +30,17 @@ class _LoginState extends State<Login> {
           width: double.infinity,
           height: MediaQuery.of(context).size.height - 26,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text("Trace me",
-                style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(255, 204, 51, 1))),
-            SizedBox(height: 30),
+            Container(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/location_icon.png"),
+                  Image.asset("assets/logo.png")
+                ],
+              ),
+            ),
+            SizedBox(height: 50),
             Form(
               key: _login,
               child: Column(
@@ -124,8 +129,8 @@ class _NewUserState extends State<NewUser> {
   var password = TextEditingController();
   var email = TextEditingController();
   var fname = TextEditingController();
+  var birth = TextEditingController();
   var _newuser = GlobalKey<FormState>();
-  DateTime birth;
 
   @override
   void dispose() {
@@ -147,12 +152,10 @@ class _NewUserState extends State<NewUser> {
             child: Column(children: [
               Row(children: [
                 GestureDetector(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 15),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Color.fromRGBO(255, 204, 51, 1),
-                    ),
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: 45,
+                    color: Color.fromRGBO(255, 204, 51, 1),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -160,17 +163,11 @@ class _NewUserState extends State<NewUser> {
                 ),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(right: 35),
-                    child: Text(
-                      "Trace me",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(255, 204, 51, 1),
-                      ),
-                    ),
-                  ),
+                      margin: EdgeInsets.only(right: 35),
+                      child: Container(
+                        height: 40,
+                        child: Image.asset("assets/logo.png"),
+                      )),
                 ),
               ]),
               SizedBox(height: 30),
@@ -213,30 +210,59 @@ class _NewUserState extends State<NewUser> {
                           if (v.length == 0) return "Please provide password";
                           return null;
                         }),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      child: disabledField(
+                          controller: birth,
+                          validator: (v) {
+                            if (v.length == 0)
+                              return "Please provide birth date";
+                            return null;
+                          },
+                          icon: Icon(Icons.cake),
+                          hint: "Birth date"),
+                      onTap: () {
+                        showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1920),
+                                lastDate: DateTime.now())
+                            .then((value) {
+                          birth = "asd" as TextEditingController;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 8),
+                    Container(
+                      child: textAreaField(
+                          controller: address,
+                          hint: "Address",
+                          max: 8,
+                          validator: (v) {
+                            if (v.length == 0) return "Please provide address";
+                            return null;
+                          }),
+                    )
                   ]),
                 ),
-              ),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: FlatButton(
-                    height: 45,
-                    color: Hcolor().yellow,
-                    minWidth: double.infinity,
-                    child: Text("Sign up",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    onPressed: () {
-                      if(_newuser.currentState.validate()){
-                        _newuser.currentState.save();
-                      }
-                    }),
               ),
             ]),
           ),
         ),
+        bottomNavigationBar: FlatButton(
+            height: 45,
+            color: Hcolor().yellow,
+            minWidth: double.infinity,
+            child: Text("Sign up",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            onPressed: () {
+              if (_newuser.currentState.validate()) {
+                _newuser.currentState.save();
+              }
+            }),
       ),
     );
   }
