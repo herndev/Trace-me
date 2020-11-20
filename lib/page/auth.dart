@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
 
@@ -228,7 +229,7 @@ class _NewUserState extends State<NewUser> {
                                 firstDate: DateTime(1920),
                                 lastDate: DateTime.now())
                             .then((value) {
-                          birth = "asd" as TextEditingController;
+                          birth.text = DateFormat('yyyy-MM-dd').format(value);
                         });
                       },
                     ),
