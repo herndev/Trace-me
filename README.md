@@ -1,6 +1,8 @@
-# traceme
+<img src="https://github.com/herndev/Trace-me/blob/master/assets/logo.png" >
 
-A new Flutter application.
+# Trace me
+
+A new Flutter application intended for contact tracing.
 
 ## Getting Started
 
