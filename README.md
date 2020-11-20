@@ -1,4 +1,6 @@
+<p align="center">
 <img src="https://github.com/herndev/Trace-me/blob/master/assets/logo.png" >
+</p>
 
 # Trace me
 
