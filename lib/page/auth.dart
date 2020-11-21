@@ -92,21 +92,29 @@ class _LoginState extends State<Login> {
                             color: Colors.blue)),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, "/newuser");
+                    var route = MaterialPageRoute(
+                      builder: (copntext) => NewUser()
+                    );
+                    Navigator.of(context).push(route);
                   },
                 ),
                 Positioned(
                   top: 30,
                   child: GestureDetector(
                     child: Container(
-                      child: Text("Sign up for a management account",
+                      child: Text("Sign up for an management account",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Color.fromRGBO(255, 204, 51, 1))),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      var route = MaterialPageRoute(
+                      builder: (copntext) => NewUser(userType: "employee")
+                    );
+                    Navigator.of(context).push(route);
+                    },
                   ),
                 ),
               ]),
@@ -118,8 +126,15 @@ class _LoginState extends State<Login> {
   }
 }
 
+
+
+
 // REGISTER
 class NewUser extends StatefulWidget {
+
+  final userType;
+  NewUser({this.userType: "customer"});
+
   @override
   _NewUserState createState() => _NewUserState();
 }
@@ -131,6 +146,8 @@ class _NewUserState extends State<NewUser> {
   var email = TextEditingController();
   var fname = TextEditingController();
   var birth = TextEditingController();
+  var company = TextEditingController();
+  var position = TextEditingController();
   var _newuser = GlobalKey<FormState>();
 
   @override
@@ -140,6 +157,13 @@ class _NewUserState extends State<NewUser> {
     password.dispose();
     email.dispose();
     fname.dispose();
+    birth.dispose();
+
+    if (widget.userType != "customer") {
+      position.dispose();
+      company.dispose();
+    }
+
     super.dispose();
   }
 
@@ -186,8 +210,13 @@ class _NewUserState extends State<NewUser> {
                         icon: Icon(Icons.person),
                         hint: "Full name"),
                     SizedBox(height: 8),
-                    emailField(
+                    inputField(
                         controller: email,
+                        hint: widget.userType == "customer"
+                            ? "Email"
+                            : "Company email",
+                        icon: Icon(Icons.email),
+                        type: TextInputType.emailAddress,
                         validator: (v) {
                           if (v.length == 0 || !v.contains("@"))
                             return "Please provide email";
@@ -196,7 +225,9 @@ class _NewUserState extends State<NewUser> {
                     SizedBox(height: 8),
                     inputField(
                         controller: phone,
-                        hint: "Phone",
+                        hint: widget.userType == "customer"
+                            ? "Phone"
+                            : "Company contact number",
                         icon: Icon(Icons.phone),
                         type: TextInputType.phone,
                         validator: (v) {
@@ -225,14 +256,42 @@ class _NewUserState extends State<NewUser> {
                       onTap: () {
                         showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now(),
+                                initialDate: birth.text == ""
+                                    ? DateTime.now()
+                                    : DateTime.parse(
+                                        birth.text + " " + "00:00:00"),
                                 firstDate: DateTime(1920),
                                 lastDate: DateTime.now())
                             .then((value) {
-                          birth.text = DateFormat('yyyy-MM-dd').format(value);
+                          if (value != null) {
+                            birth.text = DateFormat('yyyy-MM-dd').format(value);
+                          }
                         });
                       },
                     ),
+                    if (widget.userType != "customer")
+                      Column(children: [
+                        SizedBox(height: 8),
+                        inputField(
+                            controller: company,
+                            hint: "Company",
+                            icon: Icon(Icons.business),
+                            validator: (v) {
+                              if (v.length == 0)
+                                return "Please provide company";
+                              return null;
+                            }),
+                        SizedBox(height: 8),
+                        inputField(
+                            controller: position,
+                            hint: "Position",
+                            icon: Icon(Icons.person_outline),
+                            validator: (v) {
+                              if (v.length == 0)
+                                return "Please provide position";
+                              return null;
+                            }),
+                      ]),
                     SizedBox(height: 8),
                     Container(
                       child: textAreaField(
@@ -260,7 +319,7 @@ class _NewUserState extends State<NewUser> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
             onPressed: () {
-              if (_newuser.currentState.validate()) {
+              if (_newuser.currentState.validate() && birth.text != "") {
                 _newuser.currentState.save();
               }
             }),
