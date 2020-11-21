@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
+import 'package:traceme/model/user.dart';
 
 // LOGIN
 class Login extends StatefulWidget {
@@ -23,6 +25,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    
+    final user = Provider.of<User>(context);
+
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -76,6 +81,12 @@ class _LoginState extends State<Login> {
                 onPressed: () {
                   if (_login.currentState.validate()) {
                     _login.currentState.save();
+
+                    // Begin Authenticate
+                    // End Authenticate
+                    
+                    user.setType("employee");
+                    Navigator.pushNamed(context, "/home");
                   }
                 }),
             SizedBox(height: 50),

@@ -10,11 +10,11 @@ import 'model/user.dart';
 
 void main() {
   runApp(
-    Provider(
-      create: (context) => User(),
+    ChangeNotifierProvider(
+      create: (_) => User(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: "/home",
+        initialRoute: "/login",
         routes: {
           "/login": (context) => Login(),
           "/status": (context) => UpdateStatus(),
@@ -22,7 +22,7 @@ void main() {
           "/profile": (context) => Profile(),
         },
         theme: ThemeData(primaryColor: Hcolor().yellow),
-      )
-    )
+      ),
+    ),
   );
 }

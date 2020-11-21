@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traceme/component/appbar.dart';
+import 'package:traceme/model/user.dart';
 
 class Home extends StatefulWidget {
-  final userType;
-  Home({this.userType: "customer"});
+  // final userType;
+  // Home({this.userType: "customer"});
 
   @override
   _HomeState createState() => _HomeState();
@@ -13,14 +14,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of(context);
-
+    final userType = Provider.of<User>(context);
     return SafeArea(
       child: Scaffold(
         appBar: mainAppBar(
             itemBuilder: (context) => [
                   PopupMenuItem(value: 1, child: Text("Profile")),
-                  if (widget.userType != "customer")
+                  if (userType.type != "customer")
                     PopupMenuItem(value: 2, child: Text("Download csv")),
                   PopupMenuItem(value: 3, child: Text("Logout")),
                 ],
@@ -31,7 +31,6 @@ class _HomeState extends State<Home> {
             }),
         body: Container(
           child: Column(children: [
-            Text(user.User().name),
             // Camera
             Expanded(
               child: Center(
@@ -41,7 +40,7 @@ class _HomeState extends State<Home> {
                       text: "[ ",
                       children: [
                         TextSpan(
-                            text: widget.userType == "customer"
+                            text: userType.type == "customer"
                                 ? "QR Code"
                                 : "QR Scan",
                             style:
@@ -53,7 +52,7 @@ class _HomeState extends State<Home> {
                 onPressed: () {},
               )),
             ),
-            if (widget.userType == "customer")
+            if (userType.type == "customer")
               Container(
                 height: 64,
                 width: double.infinity,
