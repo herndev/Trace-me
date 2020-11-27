@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class User extends ChangeNotifier{
+class UserData extends ChangeNotifier{
   
   String type;
   

@@ -37,7 +37,7 @@ class _UpdateStatusState extends State<UpdateStatus> {
 
   @override
   Widget build(BuildContext context) {
-    final userType = Provider.of<User>(context);
+    final userType = Provider.of<UserData>(context);
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -144,7 +144,7 @@ class _HistoryStatusState extends State<HistoryStatus> {
 
   @override
   Widget build(BuildContext context) {
-    final userType = Provider.of<User>(context);
+    final userType = Provider.of<UserData>(context);
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(

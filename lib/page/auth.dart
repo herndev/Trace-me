@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
-import 'package:traceme/model/user.dart';
+// import 'package:traceme/model/user.dart';
+import 'package:traceme/service/authentication.dart';
 
 // LOGIN
 class Login extends StatefulWidget {
@@ -15,6 +17,7 @@ class _LoginState extends State<Login> {
   var email = TextEditingController();
   var password = TextEditingController();
   var _login = GlobalKey<FormState>();
+  var auth = AuthenticationService(FirebaseAuth.instance);
 
   @override
   void dispose() {
@@ -26,7 +29,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     
-    final user = Provider.of<User>(context);
+    // final user = Provider.of<UserData>(context);
 
     return SafeArea(
         child: Scaffold(
@@ -83,10 +86,12 @@ class _LoginState extends State<Login> {
                     _login.currentState.save();
 
                     // Begin Authenticate
+                    var result = auth.signIn(email: email.text, password: password.text);
                     // End Authenticate
                     
-                    user.setType("customer");
-                    Navigator.pushNamed(context, "/home");
+                    print(result);
+                    // user.setType("customer");
+                    // Navigator.pushNamed(context, "/home");
                   }
                 }),
             SizedBox(height: 50),

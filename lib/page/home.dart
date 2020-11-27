@@ -14,7 +14,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    final userType = Provider.of<User>(context);
+    final userType = Provider.of<UserData>(context);
     return SafeArea(
       child: Scaffold(
         appBar: mainAppBar(
