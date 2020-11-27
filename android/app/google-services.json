@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "786249912335",
+    "firebase_url": "https://traceme-1445f.firebaseio.com",
+    "project_id": "traceme-1445f",
+    "storage_bucket": "traceme-1445f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786249912335:android:9c549ff0c68c0a47f7537a",
+        "android_client_info": {
+          "package_name": "com.herndev.traceme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786249912335-akptu0u42kulh3vjouqa8bv1o8pmd9p3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAANJRbwq7LzY2oqvWaQ12r-qbwfj3XpzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786249912335-akptu0u42kulh3vjouqa8bv1o8pmd9p3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
