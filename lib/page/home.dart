@@ -18,8 +18,13 @@ class _HomeState extends State<Home> {
     return SafeArea(
       child: Scaffold(
         appBar: mainAppBar(
+            context: context,
+            goto: "none",
             itemBuilder: (context) => [
+                  if (userType.type == "customer")
                   PopupMenuItem(value: 1, child: Text("Profile")),
+                  if (userType.type == "customer")
+                  PopupMenuItem(value: 4, child: Text("History")),
                   if (userType.type != "customer")
                     PopupMenuItem(value: 2, child: Text("Download csv")),
                   PopupMenuItem(value: 3, child: Text("Logout")),
@@ -27,6 +32,10 @@ class _HomeState extends State<Home> {
             onSelected: (p) {
               if (p == 1) {
                 Navigator.pushNamed(context, "/profile");
+              }if (p == 3){
+                Navigator.pushNamed(context, "/login");
+              }if (p == 4){
+                Navigator.pushNamed(context, "/history");
               }
             }),
         body: Container(
@@ -34,15 +43,16 @@ class _HomeState extends State<Home> {
             // Camera
             Expanded(
               child: Center(
-                  child: TextButton(
+                  child: 
+                  userType.type == "customer" ?
+                  Image.asset("assets/qrcode.png")
+                  :TextButton(
                 child: RichText(
                   text: TextSpan(
                       text: "[ ",
                       children: [
                         TextSpan(
-                            text: userType.type == "customer"
-                                ? "QR Code"
-                                : "QR Scan",
+                            text: "QR Scan",
                             style:
                                 TextStyle(fontSize: 24, color: Colors.black)),
                         TextSpan(text: " ]", style: TextStyle(fontSize: 32))
@@ -59,8 +69,10 @@ class _HomeState extends State<Home> {
                 child: RaisedButton(
                   color: Color.fromRGBO(255, 204, 51, 1),
                   child: Text("Update data",
-                      style: TextStyle(fontSize: 24, color: Colors.white)),
-                  onPressed: () {},
+                    style: TextStyle(fontSize: 24, color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/status");
+                  },
                 ),
               )
           ]),

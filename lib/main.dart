@@ -18,6 +18,7 @@ void main() {
         routes: {
           "/login": (context) => Login(),
           "/status": (context) => UpdateStatus(),
+          "/history": (context) => HistoryStatus(),
           "/home": (context) => Home(),
           "/profile": (context) => Profile(),
         },

@@ -12,7 +12,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: normalAppBar(),
+      appBar: normalAppBar(context: context),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Center(
@@ -27,7 +27,7 @@ class _ProfileState extends State<Profile> {
                   backgroundColor: Colors.amber[100],
                   child: Icon(
                     Icons.person,
-                    color: Colors.grey[900],
+                    color: Colors.grey[400],
                     size: 70,
                   ),
                 ),

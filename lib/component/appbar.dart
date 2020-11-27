@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-Widget mainAppBar({@required itemBuilder, @required onSelected}) {
+Widget mainAppBar({@required context, goto: "/home", @required itemBuilder, @required onSelected}) {
   return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Color.fromRGBO(255, 204, 51, 1),
       title: Row(children: [
-        Text("Trace me", style: TextStyle(fontSize: 24, color: Colors.white)),
+        GestureDetector(onTap: (){ if(goto != "none") Navigator.pushNamed(context, goto);}, child: Text("Trace me", style: TextStyle(fontSize: 24, color: Colors.white))),
         Spacer(),
         PopupMenuButton(
           child: CircleAvatar(
@@ -22,13 +22,13 @@ Widget mainAppBar({@required itemBuilder, @required onSelected}) {
       ]));
 }
 
-Widget normalAppBar() {
+Widget normalAppBar({@required context, goto: "/home", }) {
   return AppBar(
     iconTheme: IconThemeData(
       color: Colors.white, //change your color here
     ),
     backgroundColor: Color.fromRGBO(255, 204, 51, 1),
     title:
-        Text("Trace me", style: TextStyle(fontSize: 24, color: Colors.white)),
+        GestureDetector(onTap: (){Navigator.pushNamed(context, goto);}, child: Text("Trace me", style: TextStyle(fontSize: 24, color: Colors.white))),
   );
 }

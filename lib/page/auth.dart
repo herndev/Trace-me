@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                     // Begin Authenticate
                     // End Authenticate
                     
-                    user.setType("employee");
+                    user.setType("customer");
                     Navigator.pushNamed(context, "/home");
                   }
                 }),
