@@ -28,6 +28,24 @@ class Hquery{
     return snapshot.data();
   }
 
+  Future<dynamic> getKeyByData(root, key, value) async {
+    var ids = await getIDs(root);
+
+    for (var i in ids) {
+      var d = await getDataByID(root, i);
+      
+      try{
+        if(d[key] == value){
+          return i;
+        }
+      }catch(e){
+        print(e);
+      }
+    }
+
+    return null;
+  }
+
   // Future<String> getUrl(file, {folder:""}) async {
   //   var dir = folder.length == 0 ? folder : "/" + folder + "/";
   //   var rf = dbs.ref().child(dir + file);
@@ -77,6 +95,9 @@ class Hquery{
     await update(root, key, data);
     return true;
   }
+
+
+
 
   // Future<bool> downloadFromUrl(url, fileName)async{
   //   var status = await Permission.storage.request();

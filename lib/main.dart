@@ -18,7 +18,7 @@ void main() async{
   runApp(
     MultiProvider(
       providers: [
-        Provider<UserData>(create: (_) => UserData()),
+        ListenableProvider(create: (_) => UserData()),
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),

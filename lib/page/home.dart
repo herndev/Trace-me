@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traceme/component/appbar.dart';
 import 'package:traceme/model/user.dart';
+import 'package:traceme/service/authentication.dart';
 
 class Home extends StatefulWidget {
   // final userType;
@@ -12,6 +14,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  var auth = AuthenticationService(FirebaseAuth.instance);
+  
   @override
   Widget build(BuildContext context) {
     final userType = Provider.of<UserData>(context);
@@ -33,7 +37,7 @@ class _HomeState extends State<Home> {
               if (p == 1) {
                 Navigator.pushNamed(context, "/profile");
               }if (p == 3){
-                Navigator.pushNamed(context, "/login");
+                auth.signOut();
               }if (p == 4){
                 Navigator.pushNamed(context, "/history");
               }

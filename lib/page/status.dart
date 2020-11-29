@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traceme/component/appbar.dart';
 import 'package:traceme/model/history.dart';
 import 'package:traceme/model/user.dart';
+import 'package:traceme/service/authentication.dart';
 
 // Update status
 class UpdateStatus extends StatefulWidget {
@@ -131,6 +133,7 @@ class HistoryStatus extends StatefulWidget {
 class _HistoryStatusState extends State<HistoryStatus> {
   List<History> histories = [];
   List<String> questionKeys;
+  var auth = AuthenticationService(FirebaseAuth.instance);
 
   @override
   void initState() {
@@ -165,7 +168,7 @@ class _HistoryStatusState extends State<HistoryStatus> {
                 Navigator.pushNamed(context, "/profile");
               }
               if (p == 3) {
-                Navigator.pushNamed(context, "/login");
+                auth.signOut();
               }
               if (p == 4) {
                 Navigator.pushNamed(context, "/history");

@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +8,7 @@ import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
 // import 'package:traceme/model/user.dart';
 import 'package:traceme/service/authentication.dart';
+import 'package:traceme/service/query.dart';
 
 // LOGIN
 class Login extends StatefulWidget {
@@ -18,6 +21,7 @@ class _LoginState extends State<Login> {
   var password = TextEditingController();
   var _login = GlobalKey<FormState>();
   var auth = AuthenticationService(FirebaseAuth.instance);
+  var signing = false;
 
   @override
   void dispose() {
@@ -76,20 +80,34 @@ class _LoginState extends State<Login> {
                 height: 45,
                 color: Color.fromRGBO(255, 204, 51, 1),
                 minWidth: double.infinity,
-                child: Text("Sign in",
+                child: 
+                signing ?
+                Text("Signing-in...",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white))
+                :Text("Sign in",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                onPressed: () {
-                  if (_login.currentState.validate()) {
+                onPressed: () async{
+                  if (_login.currentState.validate() && !signing) {
                     _login.currentState.save();
 
+                    setState(() {
+                      signing = true;
+                    });
+
                     // Begin Authenticate
-                    var result = auth.signIn(email: email.text, password: password.text);
+                    var result = await auth.signIn(email: email.text, password: password.text);
                     // End Authenticate
                     
                     print(result);
+                    setState(() {
+                      signing = false;
+                    });
                     // user.setType("customer");
                     // Navigator.pushNamed(context, "/home");
                   }
@@ -156,6 +174,8 @@ class NewUser extends StatefulWidget {
 }
 
 class _NewUserState extends State<NewUser> {
+  var auth = AuthenticationService(FirebaseAuth.instance);
+  var _scaffold = GlobalKey<ScaffoldState>();
   var phone = TextEditingController();
   var address = TextEditingController();
   var password = TextEditingController();
@@ -165,6 +185,8 @@ class _NewUserState extends State<NewUser> {
   var company = TextEditingController();
   var position = TextEditingController();
   var _newuser = GlobalKey<FormState>();
+  var que = Hquery();
+  var signing = false;
 
   @override
   void dispose() {
@@ -187,6 +209,7 @@ class _NewUserState extends State<NewUser> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffold,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -329,14 +352,56 @@ class _NewUserState extends State<NewUser> {
             height: 45,
             color: Hcolor().yellow,
             minWidth: double.infinity,
-            child: Text("Sign up",
+            child: 
+            signing ?
+            Text("Signing-up...",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white))
+            : Text("Sign up",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
-            onPressed: () {
-              if (_newuser.currentState.validate() && birth.text != "") {
+            onPressed: () async{
+              if (_newuser.currentState.validate() && birth.text != "" && !signing) {
                 _newuser.currentState.save();
+
+                
+                // await que.getKeyByData("users", "email", email.text) == null
+                if(true){
+
+                  setState(() {
+                    signing = true;
+                  });
+
+                  var  result = await auth.signUp(email: email.text, password: password.text);
+
+                  if(result == "Signed up"){
+                      await que.push("users", {
+                      "name": fname.text,
+                      "email": email.text,
+                      "phone": phone.text,
+                      "birthDate": birth.text,
+                      "address": address.text,
+                      "userType": widget.userType,
+                    });
+                    
+                    Navigator.pop(context);
+                  }else{
+                    _scaffold.currentState.showSnackBar(
+                      SnackBar(
+                        content: Text(result),
+                      )
+                    );
+                  }
+
+
+                  setState(() {
+                    signing = false;
+                  });
+                }
               }
             }),
       ),
