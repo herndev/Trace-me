@@ -4,11 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-// import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
 import 'package:traceme/model/user.dart';
-// import 'package:traceme/model/user.dart';
 import 'package:traceme/service/authentication.dart';
 import 'package:traceme/service/query.dart';
 
@@ -107,14 +106,17 @@ class _LoginState extends State<Login> {
                     var result = await auth.signIn(email: email.text, password: password.text);
                     // End Authenticate
 
-                    var u = await que.getDataByData("users", "email", email.text);
-                    user.setType(u['userType']);
                     
                     print(result);
                     if(result != "Signed in"){
                       setState(() {
                         signing = false;
                       });
+                    }else{
+                      var pref = await SharedPreferences.getInstance();
+                      var u = await que.getDataByData("users", "email", email.text);
+                      pref.setString("userType", u['userType']);
+                      user.setType(u['userType']);
                     }
                   }
                 }),
