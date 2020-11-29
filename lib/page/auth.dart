@@ -3,9 +3,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
+import 'package:traceme/model/user.dart';
 // import 'package:traceme/model/user.dart';
 import 'package:traceme/service/authentication.dart';
 import 'package:traceme/service/query.dart';
@@ -21,6 +23,7 @@ class _LoginState extends State<Login> {
   var password = TextEditingController();
   var _login = GlobalKey<FormState>();
   var auth = AuthenticationService(FirebaseAuth.instance);
+  final que = Hquery();
   var signing = false;
 
   @override
@@ -33,7 +36,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     
-    // final user = Provider.of<UserData>(context);
+    final user = Provider.of<UserData>(context, listen: false);
 
     return SafeArea(
         child: Scaffold(
@@ -103,13 +106,16 @@ class _LoginState extends State<Login> {
                     // Begin Authenticate
                     var result = await auth.signIn(email: email.text, password: password.text);
                     // End Authenticate
+
+                    var u = await que.getDataByData("users", "email", email.text);
+                    user.setType(u['userType']);
                     
                     print(result);
-                    setState(() {
-                      signing = false;
-                    });
-                    // user.setType("customer");
-                    // Navigator.pushNamed(context, "/home");
+                    if(result != "Signed in"){
+                      setState(() {
+                        signing = false;
+                      });
+                    }
                   }
                 }),
             SizedBox(height: 50),
@@ -395,12 +401,11 @@ class _NewUserState extends State<NewUser> {
                         content: Text(result),
                       )
                     );
+
+                    setState(() {
+                      signing = false;
+                    });
                   }
-
-
-                  setState(() {
-                    signing = false;
-                  });
                 }
               }
             }),

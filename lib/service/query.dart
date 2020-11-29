@@ -46,6 +46,25 @@ class Hquery{
     return null;
   }
 
+
+  Future<dynamic> getDataByData(root, key, value) async {
+    var ids = await getIDs(root);
+
+    for (var i in ids) {
+      var d = await getDataByID(root, i);
+      
+      try{
+        if(d[key] == value){
+          return d;
+        }
+      }catch(e){
+        print(e);
+      }
+    }
+
+    return null;
+  }
+
   // Future<String> getUrl(file, {folder:""}) async {
   //   var dir = folder.length == 0 ? folder : "/" + folder + "/";
   //   var rf = dbs.ref().child(dir + file);

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:traceme/service/query.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
+  final que = Hquery();
 
   AuthenticationService(this._firebaseAuth);
 
@@ -15,6 +17,7 @@ class AuthenticationService {
   Future<String> signIn({String email, String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      
       return "Signed in";
     } on FirebaseAuthException catch (e) {
       return e.message;
