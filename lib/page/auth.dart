@@ -116,7 +116,6 @@ class _LoginState extends State<Login> {
                       var pref = await SharedPreferences.getInstance();
                       var u = await que.getDataByData("users", "email", email.text);
                       pref.setString("userType", u['userType']);
-                      pref.setString("user", u['email']);
                       user.setType(u['userType']);
                     }
                   }
