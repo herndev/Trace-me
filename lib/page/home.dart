@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traceme/component/appbar.dart';
 import 'package:traceme/model/user.dart';
 import 'package:traceme/service/authentication.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:traceme/service/query.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,6 +15,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var auth = AuthenticationService(FirebaseAuth.instance);
+  var que = Hquery();
+  var _user = "";
 
   @override
   void initState() {
@@ -53,7 +58,8 @@ class _HomeState extends State<Home> {
             Expanded(
               child: Center(
                   child: userType.type == "customer"
-                      ? Image.asset("assets/qrcode.png")
+                      ? QrImage(data: _user)
+                      // Image.asset("assets/qrcode.png")
                       : TextButton(
                           child: RichText(
                             text: TextSpan(
@@ -90,5 +96,17 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  Future<void> getUser() async{
+    var pref = await SharedPreferences.getInstance();
+
+    if(pref.getString("user") != null ){
+      var _tempUser = await que.getKeyByData("users", "email", pref.getString("user"));
+      
+      setState(() {
+        _user = _tempUser;
+      });
+    }
   }
 }
