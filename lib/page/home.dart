@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var auth = AuthenticationService(FirebaseAuth.instance);
+  var cameraScanResult = "";
   var que = Hquery();
   var _user = "";
 
@@ -55,7 +56,6 @@ class _HomeState extends State<Home> {
             }),
         body: Container(
           child: Column(children: [
-            // Camera
             Expanded(
               child: Center(
                   child: userType.type == "customer"
@@ -77,10 +77,12 @@ class _HomeState extends State<Home> {
                                     TextStyle(fontSize: 32, color: Colors.red)),
                           ),
                           onPressed: () async{
-                            String cameraScanResult = await scanner.scan();
+                            cameraScanResult = await scanner.scan();
                           },
                         )),
             ),
+            if (userType.type != "customer")
+            Text(cameraScanResult),
             if (userType.type == "customer")
               Container(
                 height: 64,
