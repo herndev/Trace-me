@@ -7,6 +7,7 @@ import 'package:traceme/model/user.dart';
 import 'package:traceme/service/authentication.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:traceme/service/query.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class Home extends StatefulWidget {
   @override
@@ -59,7 +60,6 @@ class _HomeState extends State<Home> {
               child: Center(
                   child: userType.type == "customer"
                       ? QrImage(data: _user)
-                      // Image.asset("assets/qrcode.png")
                       : TextButton(
                           child: RichText(
                             text: TextSpan(
@@ -76,7 +76,9 @@ class _HomeState extends State<Home> {
                                 style:
                                     TextStyle(fontSize: 32, color: Colors.red)),
                           ),
-                          onPressed: () {},
+                          onPressed: () async{
+                            String cameraScanResult = await scanner.scan();
+                          },
                         )),
             ),
             if (userType.type == "customer")

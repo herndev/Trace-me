@@ -30,6 +30,7 @@ dependencies:
   intl: ^0.16.1
   provider: ^4.3.2+2
   shared_preferences: ^0.5.12+4
+  qrscan: ^0.2.19
   qr_flutter: ^3.2.0
 
 dev_dependencies:

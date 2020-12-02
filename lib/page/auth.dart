@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   var email = TextEditingController();
   var password = TextEditingController();
   var _login = GlobalKey<FormState>();
+  var _scaffold = GlobalKey<ScaffoldState>();
   var auth = AuthenticationService(FirebaseAuth.instance);
   final que = Hquery();
   var signing = false;
@@ -39,6 +40,7 @@ class _LoginState extends State<Login> {
 
     return SafeArea(
         child: Scaffold(
+          key: _scaffold,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(50),
@@ -108,7 +110,15 @@ class _LoginState extends State<Login> {
 
                     
                     print(result);
+
                     if(result != "Signed in"){
+                      
+                      _scaffold.currentState.showSnackBar(
+                        SnackBar(
+                          content: Text(result),
+                        )
+                      );
+
                       setState(() {
                         signing = false;
                       });
