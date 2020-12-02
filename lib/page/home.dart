@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    getUser();
     super.initState();
   }
 
@@ -59,7 +60,11 @@ class _HomeState extends State<Home> {
             Expanded(
               child: Center(
                   child: userType.type == "customer"
-                      ? QrImage(data: _user)
+                      ? QrImage(
+                          data: _user,
+                          version: QrVersions.auto,
+                          size: 200.0,
+                        )
                       : TextButton(
                           child: RichText(
                             text: TextSpan(
@@ -77,12 +82,15 @@ class _HomeState extends State<Home> {
                                     TextStyle(fontSize: 32, color: Colors.red)),
                           ),
                           onPressed: () async{
-                            cameraScanResult = await scanner.scan();
+                            var sc = await scanner.scan();
+                            setState(() {
+                              cameraScanResult = sc;
+                            });
                           },
                         )),
             ),
             if (userType.type != "customer")
-            Text(cameraScanResult),
+            Text(cameraScanResult == null ? "No data" : cameraScanResult),
             if (userType.type == "customer")
               Container(
                 height: 64,
@@ -107,7 +115,7 @@ class _HomeState extends State<Home> {
 
     if(pref.getString("user") != null ){
       var _tempUser = await que.getKeyByData("users", "email", pref.getString("user"));
-      
+
       setState(() {
         _user = _tempUser;
       });

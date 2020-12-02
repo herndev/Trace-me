@@ -13,6 +13,7 @@ class AuthenticationService {
   Future<void> signOut() async {
     var pref = await SharedPreferences.getInstance();
     await pref.remove("userType");
+    await pref.remove("user");
     await _firebaseAuth.signOut();
   }
 
