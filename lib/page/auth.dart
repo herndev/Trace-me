@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
 import 'package:traceme/model/user.dart';
@@ -123,11 +122,8 @@ class _LoginState extends State<Login> {
                         signing = false;
                       });
                     }else{
-                      var pref = await SharedPreferences.getInstance();
                       var u = await que.getDataByData("users", "email", email.text);
-                      pref.setString("userType", u['userType']);
-                      pref.setString("user", email.text);
-                      user.setType(u['userType']);
+                      await user.setType(u['userType']);
                     }
                   }
                 }),

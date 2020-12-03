@@ -12,6 +12,7 @@ class AuthenticationService {
 
   Future<void> signOut() async {
     var pref = await SharedPreferences.getInstance();
+
     await pref.remove("userType");
     await pref.remove("user");
     await _firebaseAuth.signOut();
@@ -20,6 +21,10 @@ class AuthenticationService {
 
   Future<String> signIn({String email, String password}) async {
     try {
+      var pref = await SharedPreferences.getInstance();
+      var u = await que.getDataByData("users", "email", email);
+      await pref.setString("userType", u['userType']);
+      await pref.setString("user", email);
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       
       return "Signed in";

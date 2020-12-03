@@ -8,6 +8,7 @@ import 'package:traceme/service/authentication.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:traceme/service/query.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -55,7 +56,14 @@ class _HomeState extends State<Home> {
                 Navigator.pushNamed(context, "/history");
               }
             }),
-        body: Container(
+        body: 
+        _user == ""?
+        Center(
+          child: SpinKitFadingCube(
+            color: Colors.cyan[700],
+          ),
+        )
+        :Container(
           child: Column(children: [
             Expanded(
               child: Center(
