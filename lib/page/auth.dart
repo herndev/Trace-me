@@ -131,7 +131,9 @@ class _LoginState extends State<Login> {
             Container(
               height: 80,
               width: double.infinity,
-              child: Stack(alignment: Alignment.topLeft, children: [
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topLeft, children: [
                 GestureDetector(
                   child: Container(
                     child: Text("Create account",
@@ -151,7 +153,7 @@ class _LoginState extends State<Login> {
                   top: 30,
                   child: GestureDetector(
                     child: Container(
-                      child: Text("Sign up for an management account",
+                      child: Text("Sign up for a management account.",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 16,
@@ -394,6 +396,7 @@ class _NewUserState extends State<NewUser> {
                   var  result = await auth.signUp(email: email.text, password: password.text);
 
                   if(result == "Signed up"){
+                    if(widget.userType == "customer"){
                       await que.push("users", {
                       "name": fname.text,
                       "email": email.text,
@@ -402,6 +405,19 @@ class _NewUserState extends State<NewUser> {
                       "address": address.text,
                       "userType": widget.userType,
                     });
+                    }else{
+                      await que.push("users", {
+                        "name": fname.text,
+                        "email": email.text,
+                        "phone": phone.text,
+                        "birthDate": birth.text,
+                        "address": address.text,
+                        "company": company.text,
+                        "position": position.text,
+                        "userType": widget.userType,
+                      });
+                    }
+                      
                     
                     Navigator.pop(context);
                   }else{

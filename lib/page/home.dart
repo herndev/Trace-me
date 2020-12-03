@@ -93,19 +93,45 @@ class _HomeState extends State<Home> {
                                 ),
                                 onPressed: () async {
                                   var sc = await scanner.scan();
-                                  var data = {
-                                    "userID": sc
-                                  };
+                                  var valCode = await que.checkID("users", sc);
 
-                                  showAlertDialog(context, data);
-                                  // setState(() {
-                                  //   cameraScanResult = sc;
-                                  // });
+                                  if (valCode) {
+                                    var _data =
+                                        await que.getDataByID("users", sc);
+                                    var valStatus = await que.getKeyByData(
+                                        "status", "userID", sc);
+
+                                    var latest = {
+                                      "key": "",
+                                      "timestamp": "0000-00-00 00:00:00"
+                                    };
+                                    var ids = await que.getIDs("status");
+
+                                    for (var i in ids) {
+                                      var s =
+                                          await que.getDataByID("status", i);
+                                      if (latest['timestamp']
+                                              .compareTo(s['timestamp']) <
+                                          0) {
+                                        latest['timestamp'] = s['timestamp'];
+                                        latest['key'] = i;
+                                      }
+                                    }
+
+                                    if (valStatus != null && valStatus != {} && latest['timestamp'] != "0000-00-00 00:00:00") {
+                                      var data = {
+                                        "userID": sc,
+                                        "name": _data['name'],
+                                        "statusKey": latest['key'],
+                                        "employee": _user
+                                      };
+
+                                      showAlertDialog(context, data);
+                                    }
+                                  }
                                 },
                               )),
                   ),
-                  // if (userType.type != "customer")
-                  // Text(cameraScanResult == null ? "No data" : cameraScanResult),
                   if (userType.type == "customer")
                     Container(
                       height: 64,
@@ -139,7 +165,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-
   showAlertDialog(context, data) {
     // set up the buttons
     // Widget cancelButton = FlatButton(
@@ -152,16 +177,26 @@ class _HomeState extends State<Home> {
       child: Text("Verify"),
       onPressed: () async {
         Navigator.pop(context);
+        var d = await que.getDataByID("users", _user);
+        var company = d['company'];
+        var _data = data;
+        _data['company'] = company;
+
         _scaffold.currentState
             .showSnackBar(SnackBar(content: Text("Pushing data..")));
-        // await que.push("status", data);
-        // Navigator.pop(context);
+
+        await que.push("traced", data);
+
+        _scaffold.currentState
+            .showSnackBar(SnackBar(duration: Duration(milliseconds: 250), content: Text("Data pushed")));
       },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Trace me"),
-      content: Text("Do you want to update status now?"),
+      content: Container(
+        child: Text("USER ID: ${data['userID']} \n\nVerify this user?")
+      ), 
       actions: [
         // cancelButton,
         continueButton,
