@@ -34,12 +34,11 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    
     final user = Provider.of<UserData>(context, listen: false);
 
     return SafeArea(
         child: Scaffold(
-          key: _scaffold,
+      key: _scaffold,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(50),
@@ -83,19 +82,18 @@ class _LoginState extends State<Login> {
                 height: 45,
                 color: Color.fromRGBO(255, 204, 51, 1),
                 minWidth: double.infinity,
-                child: 
-                signing ?
-                Text("Signing-in...",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white))
-                :Text("Sign in",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                onPressed: () async{
+                child: signing
+                    ? Text("Signing-in...",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white))
+                    : Text("Sign in",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                onPressed: () async {
                   if (_login.currentState.validate() && !signing) {
                     _login.currentState.save();
 
@@ -104,25 +102,23 @@ class _LoginState extends State<Login> {
                     });
 
                     // Begin Authenticate
-                    var result = await auth.signIn(email: email.text, password: password.text);
+                    var result = await auth.signIn(
+                        email: email.text, password: password.text);
                     // End Authenticate
 
-                    
                     print(result);
 
-                    if(result != "Signed in"){
-                      
-                      _scaffold.currentState.showSnackBar(
-                        SnackBar(
-                          content: Text(result),
-                        )
-                      );
+                    if (result != "Signed in") {
+                      _scaffold.currentState.showSnackBar(SnackBar(
+                        content: Text(result),
+                      ));
 
                       setState(() {
                         signing = false;
                       });
-                    }else{
-                      var u = await que.getDataByData("users", "email", email.text);
+                    } else {
+                      var u =
+                          await que.getDataByData("users", "email", email.text);
                       await user.setType(u['userType']);
                     }
                   }
@@ -132,43 +128,43 @@ class _LoginState extends State<Login> {
               height: 80,
               width: double.infinity,
               child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.topLeft, children: [
-                GestureDetector(
-                  child: Container(
-                    child: Text("Create account",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue)),
-                  ),
-                  onTap: () {
-                    var route = MaterialPageRoute(
-                      builder: (copntext) => NewUser()
-                    );
-                    Navigator.of(context).push(route);
-                  },
-                ),
-                Positioned(
-                  top: 30,
-                  child: GestureDetector(
-                    child: Container(
-                      child: Text("Sign up for a management account.",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromRGBO(255, 204, 51, 1))),
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.topLeft,
+                  children: [
+                    GestureDetector(
+                      child: Container(
+                        child: Text("Create account",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue)),
+                      ),
+                      onTap: () {
+                        var route =
+                            MaterialPageRoute(builder: (copntext) => NewUser());
+                        Navigator.of(context).push(route);
+                      },
                     ),
-                    onTap: () {
-                      var route = MaterialPageRoute(
-                      builder: (copntext) => NewUser(userType: "employee")
-                    );
-                    Navigator.of(context).push(route);
-                    },
-                  ),
-                ),
-              ]),
+                    Positioned(
+                      top: 30,
+                      child: GestureDetector(
+                        child: Container(
+                          child: Text("Sign up for a management account.",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(255, 204, 51, 1))),
+                        ),
+                        onTap: () {
+                          var route = MaterialPageRoute(
+                              builder: (copntext) =>
+                                  NewUser(userType: "employee"));
+                          Navigator.of(context).push(route);
+                        },
+                      ),
+                    ),
+                  ]),
             ),
           ]),
         ),
@@ -177,12 +173,8 @@ class _LoginState extends State<Login> {
   }
 }
 
-
-
-
 // REGISTER
 class NewUser extends StatefulWidget {
-
   final userType;
   NewUser({this.userType: "customer"});
 
@@ -369,43 +361,43 @@ class _NewUserState extends State<NewUser> {
             height: 45,
             color: Hcolor().yellow,
             minWidth: double.infinity,
-            child: 
-            signing ?
-            Text("Signing-up...",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white))
-            : Text("Sign up",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            onPressed: () async{
-              if (_newuser.currentState.validate() && birth.text != "" && !signing) {
+            child: signing
+                ? Text("Signing-up...",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white))
+                : Text("Sign up",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+            onPressed: () async {
+              if (_newuser.currentState.validate() &&
+                  birth.text != "" &&
+                  !signing) {
                 _newuser.currentState.save();
 
-                
                 // await que.getKeyByData("users", "email", email.text) == null
-                if(true){
-
+                if (true) {
                   setState(() {
                     signing = true;
                   });
 
-                  var  result = await auth.signUp(email: email.text, password: password.text);
+                  var result = await auth.signUp(
+                      email: email.text, password: password.text);
 
-                  if(result == "Signed up"){
-                    if(widget.userType == "customer"){
+                  if (result == "Signed up") {
+                    if (widget.userType == "customer") {
                       await que.push("users", {
-                      "name": fname.text,
-                      "email": email.text,
-                      "phone": phone.text,
-                      "birthDate": birth.text,
-                      "address": address.text,
-                      "userType": widget.userType,
-                    });
-                    }else{
+                        "name": fname.text,
+                        "email": email.text,
+                        "phone": phone.text,
+                        "birthDate": birth.text,
+                        "address": address.text,
+                        "userType": widget.userType,
+                      });
+                    } else {
                       await que.push("users", {
                         "name": fname.text,
                         "email": email.text,
@@ -417,15 +409,12 @@ class _NewUserState extends State<NewUser> {
                         "userType": widget.userType,
                       });
                     }
-                      
-                    
+
                     Navigator.pop(context);
-                  }else{
-                    _scaffold.currentState.showSnackBar(
-                      SnackBar(
-                        content: Text(result),
-                      )
-                    );
+                  } else {
+                    _scaffold.currentState.showSnackBar(SnackBar(
+                      content: Text(result),
+                    ));
 
                     setState(() {
                       signing = false;
