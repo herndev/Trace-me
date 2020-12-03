@@ -17,7 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var auth = AuthenticationService(FirebaseAuth.instance);
-  var cameraScanResult = "";
+  var _scaffold = GlobalKey<ScaffoldState>();
+  // var cameraScanResult = "";
   var que = Hquery();
   var _user = "";
 
@@ -33,6 +34,7 @@ class _HomeState extends State<Home> {
 
     return SafeArea(
       child: Scaffold(
+        key: _scaffold,
         appBar: mainAppBar(
             context: context,
             goto: "none",
@@ -56,77 +58,121 @@ class _HomeState extends State<Home> {
                 Navigator.pushNamed(context, "/history");
               }
             }),
-        body: 
-        _user == ""?
-        Center(
-          child: SpinKitFadingCube(
-            color: Colors.cyan[700],
-          ),
-        )
-        :Container(
-          child: Column(children: [
-            Expanded(
-              child: Center(
-                  child: userType.type == "customer"
-                      ? QrImage(
-                          data: _user,
-                          version: QrVersions.auto,
-                          size: 200.0,
-                        )
-                      : TextButton(
-                          child: RichText(
-                            text: TextSpan(
-                                text: "[ ",
-                                children: [
-                                  TextSpan(
-                                      text: "QR Scan",
-                                      style: TextStyle(
-                                          fontSize: 24, color: Colors.black)),
-                                  TextSpan(
-                                      text: " ]",
-                                      style: TextStyle(fontSize: 32))
-                                ],
-                                style:
-                                    TextStyle(fontSize: 32, color: Colors.red)),
-                          ),
-                          onPressed: () async{
-                            var sc = await scanner.scan();
-                            setState(() {
-                              cameraScanResult = sc;
-                            });
-                          },
-                        )),
-            ),
-            if (userType.type != "customer")
-            Text(cameraScanResult == null ? "No data" : cameraScanResult),
-            if (userType.type == "customer")
-              Container(
-                height: 64,
-                width: double.infinity,
-                child: RaisedButton(
-                  color: Color.fromRGBO(255, 204, 51, 1),
-                  child: Text("Update data",
-                      style: TextStyle(fontSize: 24, color: Colors.white)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/status");
-                  },
+        body: _user == ""
+            ? Center(
+                child: SpinKitFadingCube(
+                  color: Colors.cyan[700],
                 ),
               )
-          ]),
-        ),
+            : Container(
+                child: Column(children: [
+                  Expanded(
+                    child: Center(
+                        child: userType.type == "customer"
+                            ? QrImage(
+                                data: _user,
+                                version: QrVersions.auto,
+                                size: 200.0,
+                              )
+                            : TextButton(
+                                child: RichText(
+                                  text: TextSpan(
+                                      text: "[ ",
+                                      children: [
+                                        TextSpan(
+                                            text: "QR Scan",
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                color: Colors.black)),
+                                        TextSpan(
+                                            text: " ]",
+                                            style: TextStyle(fontSize: 32))
+                                      ],
+                                      style: TextStyle(
+                                          fontSize: 32, color: Colors.red)),
+                                ),
+                                onPressed: () async {
+                                  var sc = await scanner.scan();
+                                  var data = {
+                                    "userID": sc
+                                  };
+
+                                  showAlertDialog(context, data);
+                                  // setState(() {
+                                  //   cameraScanResult = sc;
+                                  // });
+                                },
+                              )),
+                  ),
+                  // if (userType.type != "customer")
+                  // Text(cameraScanResult == null ? "No data" : cameraScanResult),
+                  if (userType.type == "customer")
+                    Container(
+                      height: 64,
+                      width: double.infinity,
+                      child: RaisedButton(
+                        color: Color.fromRGBO(255, 204, 51, 1),
+                        child: Text("Update data",
+                            style:
+                                TextStyle(fontSize: 24, color: Colors.white)),
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/status");
+                        },
+                      ),
+                    )
+                ]),
+              ),
       ),
     );
   }
 
-  Future<void> getUser() async{
+  Future<void> getUser() async {
     var pref = await SharedPreferences.getInstance();
 
-    if(pref.getString("user") != null ){
-      var _tempUser = await que.getKeyByData("users", "email", pref.getString("user"));
+    if (pref.getString("user") != null) {
+      var _tempUser =
+          await que.getKeyByData("users", "email", pref.getString("user"));
 
       setState(() {
         _user = _tempUser;
       });
     }
+  }
+
+
+  showAlertDialog(context, data) {
+    // set up the buttons
+    // Widget cancelButton = FlatButton(
+    //   child: Text("Cancel"),
+    //   onPressed: () {
+    //     Navigator.pop(context);
+    //   },
+    // );
+    Widget continueButton = FlatButton(
+      child: Text("Verify"),
+      onPressed: () async {
+        Navigator.pop(context);
+        _scaffold.currentState
+            .showSnackBar(SnackBar(content: Text("Pushing data..")));
+        // await que.push("status", data);
+        // Navigator.pop(context);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Trace me"),
+      content: Text("Do you want to update status now?"),
+      actions: [
+        // cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

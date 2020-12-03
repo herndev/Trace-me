@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter_downloader/flutter_downloader.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
-class Hquery{
+class Hquery {
   String id;
   final db = FirebaseFirestore.instance;
   // final dbs = FirebaseStorage.instance;
@@ -33,12 +34,12 @@ class Hquery{
 
     for (var i in ids) {
       var d = await getDataByID(root, i);
-      
-      try{
-        if(d[key] == value){
+
+      try {
+        if (d[key] == value) {
           return i;
         }
-      }catch(e){
+      } catch (e) {
         print(e);
       }
     }
@@ -46,18 +47,17 @@ class Hquery{
     return null;
   }
 
-
   Future<dynamic> getDataByData(root, key, value) async {
     var ids = await getIDs(root);
 
     for (var i in ids) {
       var d = await getDataByID(root, i);
-      
-      try{
-        if(d[key] == value){
+
+      try {
+        if (d[key] == value) {
           return d;
         }
-      }catch(e){
+      } catch (e) {
         print(e);
       }
     }
@@ -69,7 +69,7 @@ class Hquery{
   //   var dir = folder.length == 0 ? folder : "/" + folder + "/";
   //   var rf = dbs.ref().child(dir + file);
   //   var url = await rf.getDownloadURL();
-    
+
   //   return url;
   // }
 
@@ -78,7 +78,7 @@ class Hquery{
     List<String> ids = [];
 
     // Loop through items
-    for(DocumentSnapshot item in snapshot.docs){
+    for (DocumentSnapshot item in snapshot.docs) {
       ids.add(item.id);
     }
 
@@ -90,12 +90,10 @@ class Hquery{
     return snapshot.exists;
   }
 
-
   Future<bool> update(root, key, data) async {
     await db.collection(root).doc(key).update(data).whenComplete(() => null);
     return true;
   }
-
 
   Future<bool> deleteByID(root, key) async {
     await db.collection(root).doc(key).delete();
@@ -106,7 +104,7 @@ class Hquery{
     var data = await getDataByID(root, key);
 
     for (var i in ids) {
-      if(data.keys.contains(i)){
+      if (data.keys.contains(i)) {
         data[i] = FieldValue.delete();
       }
     }
@@ -115,17 +113,14 @@ class Hquery{
     return true;
   }
 
-
-
-
   // Future<bool> downloadFromUrl(url, fileName)async{
   //   var status = await Permission.storage.request();
   //   if(status.isGranted){
-      
+
   //     var exdir = await getExternalStorageDirectory();
-      
+
   //     await FlutterDownloader.enqueue(
-  //       url: url, 
+  //       url: url,
   //       savedDir: exdir.path,
   //       fileName: fileName,
   //       showNotification: true,
@@ -133,25 +128,33 @@ class Hquery{
   //     );
 
   //     return true;
-      
+
   //   }else{
   //     return false;
   //   }
   // }
 
-  Stream getSnap(String root){
+  Stream getSnap(String root) {
     return FirebaseFirestore.instance.collection(root).snapshots();
   }
 
-  Stream getSnapSorted(String root, String by){
+  Stream getSnapSorted(String root, String by) {
     return FirebaseFirestore.instance.collection(root).orderBy(by).snapshots();
   }
 
-  Stream getSnapSortedR(String root, String by){
-    return FirebaseFirestore.instance.collection(root).orderBy(by, descending: true).snapshots();
+  Stream getSnapSortedR(String root, String by) {
+    return FirebaseFirestore.instance
+        .collection(root)
+        .orderBy(by, descending: true)
+        .snapshots();
   }
 
-  Stream getSnapByID(String root, String key){
+  Stream getSnapByID(String root, String key) {
     return FirebaseFirestore.instance.collection(root).doc(key).snapshots();
   }
 }
+
+
+
+
+
