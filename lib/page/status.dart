@@ -66,28 +66,6 @@ class _UpdateStatusState extends State<UpdateStatus> {
       child: Scaffold(
         key: _scaffold,
         appBar: normalAppBar(context: context),
-        // mainAppBar(
-        //     context: context,
-        //     itemBuilder: (context) => [
-        //           if (userType.type == "customer")
-        //             PopupMenuItem(value: 1, child: Text("Profile")),
-        //           if (userType.type == "customer")
-        //             PopupMenuItem(value: 4, child: Text("History")),
-        //           if (userType.type != "customer")
-        //             PopupMenuItem(value: 2, child: Text("Download csv")),
-        //           PopupMenuItem(value: 3, child: Text("Logout")),
-        //         ],
-        //     onSelected: (p) {
-        //       if (p == 1) {
-        //         Navigator.pushNamed(context, "/profile");
-        //       }
-        //       if (p == 3) {
-        //         Navigator.pushNamed(context, "/login");
-        //       }
-        //       if (p == 4) {
-        //         Navigator.pushNamed(context, "/history");
-        //       }
-        //     }),
         body: SingleChildScrollView(
           child: Column(children: [
             Container(
@@ -125,14 +103,6 @@ class _UpdateStatusState extends State<UpdateStatus> {
                             return SizedBox();
                           }
                         }
-
-                        // Row(children: [
-                        //   Text("Last updated 10/16/2020",
-                        //       style: TextStyle(fontSize: 18, color: Colors.orange)),
-                        //   Spacer(),
-                        //   Text("10:32 AM",
-                        //       style: TextStyle(fontSize: 18, color: Colors.orange)),
-                        // ]),
                         ),
                   ),
                 ),
@@ -266,91 +236,73 @@ class _HistoryStatusState extends State<HistoryStatus> {
 
   @override
   void initState() {
-    setState(() {
-      histories.add(
-          History(company: "Mang kanor", date: "10/11/2020", time: "10:00 AM"));
-      histories.add(
-          History(company: "Jollibee", date: "10/11/2020", time: "10:00 AM"));
-    });
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // final userType = Provider.of<UserData>(context);
-    Size size = MediaQuery.of(context).size;
-
-    return SafeArea(
-      child: Scaffold(
-        appBar: normalAppBar(context: context),
-        // mainAppBar(
-        //     context: context,
-        //     itemBuilder: (context) => [
-        //           if (userType.type == "customer")
-        //             PopupMenuItem(value: 1, child: Text("Profile")),
-        //           if (userType.type == "customer")
-        //             PopupMenuItem(value: 4, child: Text("History")),
-        //           if (userType.type != "customer")
-        //             PopupMenuItem(value: 2, child: Text("Download csv")),
-        //           PopupMenuItem(value: 3, child: Text("Logout")),
-        //         ],
-        //     onSelected: (p) {
-        //       if (p == 1) {
-        //         Navigator.pushNamed(context, "/profile");
-        //       }
-        //       if (p == 3) {
-        //         auth.signOut();
-        //       }
-        //       if (p == 4) {
-        //         Navigator.pushNamed(context, "/history");
-        //       }
-        //     }),
-        body: Container(
-          child: Column(children: [
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
+    // tracing();
+        
+        // setState(() {
+        //   histories.add(
+        //       History(company: "Mang kanor", date: "10/11/2020", time: "10:00 AM"));
+        //   histories.add(
+        //       History(company: "Jollibee", date: "10/11/2020", time: "10:00 AM"));
+        // });
+    
+        super.initState();
+      }
+    
+      @override
+      Widget build(BuildContext context) {
+        // final userType = Provider.of<UserData>(context);
+        Size size = MediaQuery.of(context).size;
+    
+        return SafeArea(
+          child: Scaffold(
+            appBar: normalAppBar(context: context),
+            body: Container(
               child: Column(children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Row(children: [
-                      Text("Last updated 10/16/2020",
-                          style: TextStyle(fontSize: 18, color: Colors.orange)),
-                      Spacer(),
-                      Text("10:32 AM",
-                          style: TextStyle(fontSize: 18, color: Colors.orange)),
-                    ]),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  height: size.height - 170,
-                  child: ListView.builder(
-                    itemCount: histories.length,
-                    itemBuilder: (_, int i) {
-                      return Card(
-                        shape: Border(
-                            left:
-                                BorderSide(width: 5, color: Colors.cyan[700])),
-                        child: ListTile(
-                          title: Text(histories[i].company),
-                          subtitle: Row(children: [
-                            Text(histories[i].date),
-                            Spacer(),
-                            Text(histories[i].time)
-                          ]),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(children: [
+                          Text("Last updated 10/16/2020",
+                              style: TextStyle(fontSize: 18, color: Colors.orange)),
+                          Spacer(),
+                          Text("10:32 AM",
+                              style: TextStyle(fontSize: 18, color: Colors.orange)),
+                        ]),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Container(
+                      height: size.height - 170,
+                      child: ListView.builder(
+                        itemCount: histories.length,
+                        itemBuilder: (_, int i) {
+                          return Card(
+                            shape: Border(
+                                left:
+                                    BorderSide(width: 5, color: Colors.cyan[700])),
+                            child: ListTile(
+                              title: Text(histories[i].company),
+                              subtitle: Row(children: [
+                                Text(histories[i].date),
+                                Spacer(),
+                                Text(histories[i].time)
+                              ]),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ]),
+                ))
               ]),
-            ))
-          ]),
-        ),
-      ),
-    );
-  }
+            ),
+          ),
+        );
+      }
+    
+      // void tracing() {}
 }
