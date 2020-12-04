@@ -9,6 +9,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:traceme/service/query.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:traceme/service/time.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _HomeState extends State<Home> {
   var _scaffold = GlobalKey<ScaffoldState>();
   // var cameraScanResult = "";
   var que = Hquery();
+  var ti = Htime();
   var _user = "";
 
   @override
@@ -123,7 +125,8 @@ class _HomeState extends State<Home> {
                                         "userID": sc,
                                         "name": _data['name'],
                                         "statusKey": latest['key'],
-                                        "employee": _user
+                                        "employee": _user,
+                                        "timestamp": ti.getTimeStamp()
                                       };
 
                                       showAlertDialog(context, data);

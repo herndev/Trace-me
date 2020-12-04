@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traceme/component/appbar.dart';
@@ -50,7 +51,6 @@ class _UpdateStatusState extends State<UpdateStatus> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     temperature.dispose();
@@ -94,7 +94,8 @@ class _UpdateStatusState extends State<UpdateStatus> {
                                     style: TextStyle(
                                         fontSize: 18, color: Colors.orange)),
                                 Spacer(),
-                                Text("${timeStamp == null ? "" : timeStamp}",
+                                Text(
+                                    "${timeStamp == null ? "----/--/-- --:--:--" : timeStamp}",
                                     style: TextStyle(
                                         fontSize: 18, color: Colors.orange))
                               ],
@@ -102,8 +103,7 @@ class _UpdateStatusState extends State<UpdateStatus> {
                           } else {
                             return SizedBox();
                           }
-                        }
-                        ),
+                        }),
                   ),
                 ),
                 Card(
@@ -146,18 +146,16 @@ class _UpdateStatusState extends State<UpdateStatus> {
                 onPressed: () async {
                   var valTemp = false;
 
-                  try{
+                  try {
                     var t = int.parse(temperature.text);
-                    if(t > 0){
+                    if (t > 0) {
                       valTemp = true;
                     }
-                  }catch(e){
+                  } catch (e) {
                     print(e);
                   }
 
-
                   if (!updating && valTemp) {
-
                     // // Process data
                     var data = questions;
                     data['userID'] = userID;
@@ -231,78 +229,128 @@ class HistoryStatus extends StatefulWidget {
 
 class _HistoryStatusState extends State<HistoryStatus> {
   List<History> histories = [];
-  List<String> questionKeys;
   var auth = AuthenticationService(FirebaseAuth.instance);
+  var que = Hquery();
+  var ti = Htime();
+  var userID;
+  var timeStamp;
 
   @override
   void initState() {
-    // tracing();
-        
-        // setState(() {
-        //   histories.add(
-        //       History(company: "Mang kanor", date: "10/11/2020", time: "10:00 AM"));
-        //   histories.add(
-        //       History(company: "Jollibee", date: "10/11/2020", time: "10:00 AM"));
-        // });
-    
-        super.initState();
-      }
-    
-      @override
-      Widget build(BuildContext context) {
-        // final userType = Provider.of<UserData>(context);
-        Size size = MediaQuery.of(context).size;
-    
-        return SafeArea(
-          child: Scaffold(
-            appBar: normalAppBar(context: context),
-            body: Container(
-              child: Column(children: [
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(children: [
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(children: [
-                          Text("Last updated 10/16/2020",
-                              style: TextStyle(fontSize: 18, color: Colors.orange)),
-                          Spacer(),
-                          Text("10:32 AM",
-                              style: TextStyle(fontSize: 18, color: Colors.orange)),
-                        ]),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      height: size.height - 170,
-                      child: ListView.builder(
-                        itemCount: histories.length,
-                        itemBuilder: (_, int i) {
-                          return Card(
-                            shape: Border(
-                                left:
-                                    BorderSide(width: 5, color: Colors.cyan[700])),
-                            child: ListTile(
-                              title: Text(histories[i].company),
-                              subtitle: Row(children: [
-                                Text(histories[i].date),
-                                Spacer(),
-                                Text(histories[i].time)
-                              ]),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ]),
-                ))
-              ]),
-            ),
-          ),
-        );
-      }
-    
-      // void tracing() {}
+    print(">>>>>>>>>> Getting ID >>>>>>>>>>>");
+    getUserID();
+
+    // setState(() {
+    //   histories.add(
+    //       History(company: "Mang kanor", date: "10/11/2020", time: "10:00 AM"));
+    //   histories.add(
+    //       History(company: "Jollibee", date: "10/11/2020", time: "10:00 AM"));
+    // });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final userType = Provider.of<UserData>(context);
+    Size size = MediaQuery.of(context).size;
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: normalAppBar(context: context),
+        body: userID == null
+            ? Center(
+                child: SpinKitFadingCube(
+                  color: Colors.cyan[700],
+                ),
+              )
+            : Container(
+                child: StreamBuilder(
+                    stream: que.getSnapSortedR("traced", "timestamp"),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var snap = snapshot.data.documents;
+                        histories = [];
+
+                        for (var i in snap) {
+                          if(userID == i['userID']){
+                            var time = ti.stringTimestampToMap(i['timestamp']);
+
+                            histories.add(
+                              History(company: i['company'], date: time['date'], time: time['time'])
+                            );
+
+                            if (timeStamp == null) {
+                              timeStamp = i['timestamp'];
+                            }
+                          }
+                        }
+
+                        return Column(children: [
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(children: [
+                              Card(
+                                child: Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Row(
+                                        children: [
+                                          Text("Last updated",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.orange)),
+                                          Spacer(),
+                                          Text(
+                                              "${timeStamp == null ? "----/--/-- --:--:--" : timeStamp}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.orange))
+                                        ],
+                                      )
+                                    ),
+                              ),
+                              SizedBox(height: 8),
+                              Container(
+                                  height: size.height - 170,
+                                  child: ListView.builder(
+                                    itemCount: histories.length,
+                                    itemBuilder: (_, int i) {
+                                      return Card(
+                                        shape: Border(
+                                            left: BorderSide(
+                                                width: 5,
+                                                color: Colors.cyan[700])),
+                                        child: ListTile(
+                                          title: Text(histories[i].company),
+                                          subtitle: Row(children: [
+                                            Text(histories[i].date),
+                                            Spacer(),
+                                            Text(histories[i].time)
+                                          ]),
+                                        ),
+                                      );
+                                    },
+                                  )),
+                            ]),
+                          ))
+                        ]);
+                      } else {
+                        return SizedBox();
+                      }
+                    })),
+      ),
+    );
+  }
+
+  Future<void> getUserID() async {
+    var pref = await SharedPreferences.getInstance();
+    var _user =
+        await que.getKeyByData("users", "email", pref.getString("user"));
+
+    setState(() {
+      userID = _user;
+      print(">>>>>>>>>> ID: $userID >>>>>>>>>>>");
+    });
+  }
 }

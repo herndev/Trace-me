@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traceme/component/colors.dart';
 import 'package:traceme/component/input.dart';
 import 'package:traceme/model/user.dart';
@@ -409,6 +410,10 @@ class _NewUserState extends State<NewUser> {
                         "userType": widget.userType,
                       });
                     }
+
+                    var pref = await SharedPreferences.getInstance();
+                    await pref.setString("userType", widget.userType);
+                    await pref.setString("user", email.text);
 
                     Navigator.pop(context);
                   } else {

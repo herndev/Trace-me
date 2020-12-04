@@ -74,6 +74,17 @@ class Htime{
     return DateTime.parse(_date);
   }
 
+  Map stringTimestampToMap(String _timestamp){
+    var date = _timestamp.substring(0, 10);
+    var time = _timestamp.substring(10, 19);
+    var _map = {
+      "date": date,
+      "time": time,
+    };
+
+    return _map;
+  }
+
   String intToDuration(int _hour, int _minute, int _second){
     var _duration = '';
     
