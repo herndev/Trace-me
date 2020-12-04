@@ -243,6 +243,11 @@ class _HistoryStatusState extends State<HistoryStatus> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
