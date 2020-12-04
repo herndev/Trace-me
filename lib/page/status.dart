@@ -237,22 +237,13 @@ class _HistoryStatusState extends State<HistoryStatus> {
 
   @override
   void initState() {
-    print(">>>>>>>>>> Getting ID >>>>>>>>>>>");
     getUserID();
-
-    // setState(() {
-    //   histories.add(
-    //       History(company: "Mang kanor", date: "10/11/2020", time: "10:00 AM"));
-    //   histories.add(
-    //       History(company: "Jollibee", date: "10/11/2020", time: "10:00 AM"));
-    // });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final userType = Provider.of<UserData>(context);
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -350,7 +341,6 @@ class _HistoryStatusState extends State<HistoryStatus> {
 
     setState(() {
       userID = _user;
-      print(">>>>>>>>>> ID: $userID >>>>>>>>>>>");
     });
   }
 }
