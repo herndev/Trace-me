@@ -21,7 +21,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var auth = AuthenticationService(FirebaseAuth.instance);
   var _scaffold = GlobalKey<ScaffoldState>();
-  // var cameraScanResult = "";
   var que = Hquery();
   var ti = Htime();
   var _user = "";

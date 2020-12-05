@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:traceme/page/admin.dart';
 import 'package:traceme/page/auth.dart';
 import 'package:traceme/page/profile.dart';
 import 'package:traceme/page/status.dart';
@@ -28,7 +29,7 @@ void main() async{
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: "/login",
+        initialRoute: "/admin",
         routes: {
           "/login": (context) {
             final firebaseUser = context.watch<User>();
@@ -42,6 +43,7 @@ void main() async{
           "/history": (context) => HistoryStatus(),
           "/home": (context) => Home(),
           "/profile": (context) => Profile(),
+          "/admin": (context) => Admin(),
         },
         theme: ThemeData(primaryColor: Hcolor().yellow),
       ),
