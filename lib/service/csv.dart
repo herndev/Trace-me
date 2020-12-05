@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:traceme/service/time.dart';
 
-getCsv(data) async {
+Future<String> getCsv(data) async {
   var ti = Htime();
   var timestamp = ti.getTimeStamp();
   timestamp = timestamp.replaceAll(" ", "");
@@ -31,16 +31,20 @@ getCsv(data) async {
     //store file in documents folder
 
     String dir =
-        (await getExternalStorageDirectory()).absolute.path + "/documents";
+        (await getExternalStorageDirectory()).absolute.path;
     var file = "$dir";
 
     print("FILE: " + file);
     
-    File f = new File(file + "traceme$timestamp.csv");
+    File f = new File(file + "/traceme$timestamp.csv");
 
     // convert rows to String and write as csv file
-
     String csv = const ListToCsvConverter().convert(rows);
     f.writeAsString(csv);
+
+    // return location
+    return file + "/traceme$timestamp.csv";
   }
+
+  return "No access to directories";
 }

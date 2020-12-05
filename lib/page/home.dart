@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traceme/component/appbar.dart';
+import 'package:traceme/model/sensitive_data.dart';
 import 'package:traceme/model/user.dart';
 import 'package:traceme/service/authentication.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:traceme/service/csv.dart';
 import 'package:traceme/service/query.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -49,9 +51,35 @@ class _HomeState extends State<Home> {
                     PopupMenuItem(value: 2, child: Text("Download csv")),
                   PopupMenuItem(value: 3, child: Text("Logout")),
                 ],
-            onSelected: (p) {
+            onSelected: (p) async {
               if (p == 1) {
                 Navigator.pushNamed(context, "/profile");
+              }
+              if (p == 2) {
+                _scaffold.currentState.showSnackBar(
+                    SnackBar(content: Text("Downloading csv data..")));
+                var ids = await que.getIDs("traced");
+                var data = [];
+
+                for (var i in ids) {
+                  var t = await que.getDataByID("traced", i);
+                  if (t['employee'] == _user) {
+                    data.add(Customer(
+                        userID: t['userID'],
+                        timestamp: t['timestamp'],
+                        temperature: t['temperature']));
+                  }
+                }
+
+                // var data = await que.getDataByData("traced", "employee", _user);
+                var r = await getCsv(data);
+                if( r == "No access to directories"){
+                  _scaffold.currentState.showSnackBar(
+                    SnackBar(content: Text("No access to directories"), duration: Duration(milliseconds: 200),));
+                }else{
+                  _scaffold.currentState.showSnackBar(
+                    SnackBar(content: Text("Saved @ $r"), duration: Duration(seconds: 5),));
+                }
               }
               if (p == 3) {
                 auth.signOut();
@@ -120,7 +148,10 @@ class _HomeState extends State<Home> {
                                       }
                                     }
 
-                                    if (valStatus != null && valStatus != {} && latest['timestamp'] != "0000-00-00 00:00:00") {
+                                    if (valStatus != null &&
+                                        valStatus != {} &&
+                                        latest['timestamp'] !=
+                                            "0000-00-00 00:00:00") {
                                       var data = {
                                         "userID": sc,
                                         "name": _data['name'],
@@ -190,16 +221,16 @@ class _HomeState extends State<Home> {
 
         await que.push("traced", data);
 
-        _scaffold.currentState
-            .showSnackBar(SnackBar(duration: Duration(milliseconds: 250), content: Text("Data pushed")));
+        _scaffold.currentState.showSnackBar(SnackBar(
+            duration: Duration(milliseconds: 250),
+            content: Text("Data pushed")));
       },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Trace me"),
       content: Container(
-        child: Text("USER ID: ${data['userID']} \n\nVerify this user?")
-      ), 
+          child: Text("USER ID: ${data['userID']} \n\nVerify this user?")),
       actions: [
         // cancelButton,
         continueButton,
