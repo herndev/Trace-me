@@ -217,6 +217,7 @@ class _NewUserState extends State<NewUser> {
 
   @override
   Widget build(BuildContext context) {
+    var userType = Provider.of<UserData>(context);
     return SafeArea(
       child: Scaffold(
         key: _scaffold,
@@ -414,6 +415,7 @@ class _NewUserState extends State<NewUser> {
                     var pref = await SharedPreferences.getInstance();
                     await pref.setString("userType", widget.userType);
                     await pref.setString("user", email.text);
+                    userType.setType(widget.userType);
 
                     Navigator.pop(context);
                   } else {
