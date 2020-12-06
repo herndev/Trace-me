@@ -29,14 +29,18 @@ void main() async{
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: "/admin",
+        initialRoute: "/login",
         routes: {
           "/login": (context) {
             final firebaseUser = context.watch<User>();
+            final usr = context.watch<UserData>();
 
-            if (firebaseUser != null) {
+            if (firebaseUser != null && usr.type != "admin") {
               return Home();
+            }else if(usr.type == "admin"){
+              return Admin();
             }
+
             return Login();
           },
           "/status": (context) => UpdateStatus(),
