@@ -2,7 +2,7 @@
 <img src="https://github.com/herndev/Trace-me/blob/master/assets/logo.png" >
 </p>
 
-# Trace me
+# [Trace me](http://www.mediafire.com/file/8kcxdr27ubu90uq/traceme.apk/file)
 
 A new Flutter application intended for contact tracing.
 
