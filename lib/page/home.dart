@@ -72,12 +72,16 @@ class _HomeState extends State<Home> {
 
                 // var data = await que.getDataByData("traced", "employee", _user);
                 var r = await getCsv(data);
-                if( r == "No access to directories"){
-                  _scaffold.currentState.showSnackBar(
-                    SnackBar(content: Text("No access to directories"), duration: Duration(milliseconds: 200),));
-                }else{
-                  _scaffold.currentState.showSnackBar(
-                    SnackBar(content: Text("Saved @ $r"), duration: Duration(seconds: 5),));
+                if (r == "No access to directories") {
+                  _scaffold.currentState.showSnackBar(SnackBar(
+                    content: Text("No access to directories"),
+                    duration: Duration(milliseconds: 200),
+                  ));
+                } else {
+                  _scaffold.currentState.showSnackBar(SnackBar(
+                    content: Text("Saved @ $r"),
+                    duration: Duration(seconds: 5),
+                  ));
                 }
               }
               if (p == 3) {
@@ -103,67 +107,140 @@ class _HomeState extends State<Home> {
                                 version: QrVersions.auto,
                                 size: 200.0,
                               )
-                            : TextButton(
-                                child: RichText(
-                                  text: TextSpan(
-                                      text: "[ ",
-                                      children: [
-                                        TextSpan(
-                                            text: "QR Scan",
-                                            style: TextStyle(
-                                                fontSize: 24,
-                                                color: Colors.black)),
-                                        TextSpan(
-                                            text: " ]",
-                                            style: TextStyle(fontSize: 32))
-                                      ],
-                                      style: TextStyle(
-                                          fontSize: 32, color: Colors.red)),
-                                ),
-                                onPressed: () async {
-                                  var sc = await scanner.scan();
-                                  var valCode = await que.checkID("users", sc);
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/scan.png"),
+                                  SizedBox(height: 40),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 20),
+                                    decoration: BoxDecoration(
+                                        color: Colors.cyan[700],
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(25))),
+                                    child: GestureDetector(
+                                        child: Text(
+                                          "Scan now",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 21,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        onTap: () async {
+                                          var sc = await scanner.scan();
+                                          var valCode =
+                                              await que.checkID("users", sc);
 
-                                  if (valCode) {
-                                    var _data =
-                                        await que.getDataByID("users", sc);
-                                    var valStatus = await que.getKeyByData(
-                                        "status", "userID", sc);
+                                          if (valCode) {
+                                            var _data = await que.getDataByID(
+                                                "users", sc);
+                                            var valStatus =
+                                                await que.getKeyByData(
+                                                    "status", "userID", sc);
 
-                                    var latest = {
-                                      "key": "",
-                                      "timestamp": "0000-00-00 00:00:00"
-                                    };
-                                    var ids = await que.getIDs("status");
+                                            var latest = {
+                                              "key": "",
+                                              "timestamp": "0000-00-00 00:00:00"
+                                            };
+                                            var ids =
+                                                await que.getIDs("status");
 
-                                    for (var i in ids) {
-                                      var s =
-                                          await que.getDataByID("status", i);
-                                      if (latest['timestamp']
-                                              .compareTo(s['timestamp']) <
-                                          0) {
-                                        latest['timestamp'] = s['timestamp'];
-                                        latest['key'] = i;
-                                      }
-                                    }
+                                            for (var i in ids) {
+                                              var s = await que.getDataByID(
+                                                  "status", i);
+                                              if (latest['timestamp'].compareTo(
+                                                      s['timestamp']) <
+                                                  0) {
+                                                latest['timestamp'] =
+                                                    s['timestamp'];
+                                                latest['key'] = i;
+                                              }
+                                            }
 
-                                    if (valStatus != null &&
-                                        valStatus != {} &&
-                                        latest['timestamp'] !=
-                                            "0000-00-00 00:00:00") {
-                                      var data = {
-                                        "userID": sc,
-                                        "name": _data['name'],
-                                        "statusKey": latest['key'],
-                                        "employee": _user,
-                                        "timestamp": ti.getTimeStamp()
-                                      };
+                                            if (valStatus != null &&
+                                                valStatus != {} &&
+                                                latest['timestamp'] !=
+                                                    "0000-00-00 00:00:00") {
+                                              var data = {
+                                                "userID": sc,
+                                                "name": _data['name'],
+                                                "statusKey": latest['key'],
+                                                "employee": _user,
+                                                "timestamp": ti.getTimeStamp()
+                                              };
 
-                                      showAlertDialog(context, data);
-                                    }
-                                  }
-                                },
-                              )),
+                                              showAlertDialog(context, data);
+                                            }
+                                          }
+                                        }),
+                                  )
+                                ],
+                              )
+
+                        // TextButton(
+                        //     child: RichText(
+                        //       text: TextSpan(
+                        //           text: "[ ",
+                        //           children: [
+                        //             TextSpan(
+                        //                 text: "QR Scan",
+                        //                 style: TextStyle(
+                        //                     fontSize: 24,
+                        //                     color: Colors.black)),
+                        //             TextSpan(
+                        //                 text: " ]",
+                        //                 style: TextStyle(fontSize: 32))
+                        //           ],
+                        //           style: TextStyle(
+                        //               fontSize: 32, color: Colors.red)),
+                        //     ),
+                        //     onPressed: () async {
+                        //       var sc = await scanner.scan();
+                        //       var valCode = await que.checkID("users", sc);
+
+                        //       if (valCode) {
+                        //         var _data =
+                        //             await que.getDataByID("users", sc);
+                        //         var valStatus = await que.getKeyByData(
+                        //             "status", "userID", sc);
+
+                        //         var latest = {
+                        //           "key": "",
+                        //           "timestamp": "0000-00-00 00:00:00"
+                        //         };
+                        //         var ids = await que.getIDs("status");
+
+                        //         for (var i in ids) {
+                        //           var s =
+                        //               await que.getDataByID("status", i);
+                        //           if (latest['timestamp']
+                        //                   .compareTo(s['timestamp']) <
+                        //               0) {
+                        //             latest['timestamp'] = s['timestamp'];
+                        //             latest['key'] = i;
+                        //           }
+                        //         }
+
+                        //         if (valStatus != null &&
+                        //             valStatus != {} &&
+                        //             latest['timestamp'] !=
+                        //                 "0000-00-00 00:00:00") {
+                        //           var data = {
+                        //             "userID": sc,
+                        //             "name": _data['name'],
+                        //             "statusKey": latest['key'],
+                        //             "employee": _user,
+                        //             "timestamp": ti.getTimeStamp()
+                        //           };
+
+                        //           showAlertDialog(context, data);
+                        //         }
+                        //       }
+                        //     },
+                        //   )
+
+                        ),
                   ),
                   if (userType.type == "customer")
                     Container(

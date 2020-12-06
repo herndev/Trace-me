@@ -23,6 +23,8 @@ class _PasswordFieldState extends State<PasswordField> {
       validator: widget.validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
         prefixIcon: Icon(Icons.lock),
         suffixIcon: GestureDetector(
           child: Icon(pwd ? Icons.visibility_off : Icons.visibility),
@@ -49,6 +51,8 @@ Widget emailField({@required controller, @required validator}) {
     keyboardType: TextInputType.emailAddress,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     decoration: InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
       prefixIcon: Icon(Icons.email),
       hintText: "Email",
       border: OutlineInputBorder(
@@ -66,6 +70,8 @@ Widget inputField({@required controller, @required validator, @required icon, @r
     keyboardType: type,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     decoration: InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
       prefixIcon: icon,
       hintText: hint,
       border: OutlineInputBorder(
@@ -84,6 +90,8 @@ Widget disabledField({@required controller, @required validator, @required icon,
     enabled: false,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     decoration: InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
       prefixIcon: icon,
       hintText: hint,
       border: OutlineInputBorder(
@@ -101,6 +109,8 @@ Widget textAreaField({@required controller, @required hint, @required max, @requ
     autovalidateMode: AutovalidateMode.onUserInteraction,
     maxLines: max,
     decoration: InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
       hintText: hint,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
