@@ -76,6 +76,7 @@ class _AdminState extends State<Admin> {
                 // }
                 if (p == 3) {
                   auth.signOut();
+                  Navigator.pushNamed(context, "/login");
                 }
               }),
           body: TabBarView(children: [

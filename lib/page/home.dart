@@ -27,7 +27,9 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    getUser();
+    Future.delayed(Duration(seconds: 1), (){
+      getUser();
+    });
     super.initState();
   }
 
@@ -51,6 +53,7 @@ class _HomeState extends State<Home> {
                   PopupMenuItem(value: 3, child: Text("Logout")),
                 ],
             onSelected: (p) async {
+              print(_user);
               if (p == 1) {
                 Navigator.pushNamed(context, "/profile");
               }
@@ -177,69 +180,6 @@ class _HomeState extends State<Home> {
                                   )
                                 ],
                               )
-
-                        // TextButton(
-                        //     child: RichText(
-                        //       text: TextSpan(
-                        //           text: "[ ",
-                        //           children: [
-                        //             TextSpan(
-                        //                 text: "QR Scan",
-                        //                 style: TextStyle(
-                        //                     fontSize: 24,
-                        //                     color: Colors.black)),
-                        //             TextSpan(
-                        //                 text: " ]",
-                        //                 style: TextStyle(fontSize: 32))
-                        //           ],
-                        //           style: TextStyle(
-                        //               fontSize: 32, color: Colors.red)),
-                        //     ),
-                        //     onPressed: () async {
-                        //       var sc = await scanner.scan();
-                        //       var valCode = await que.checkID("users", sc);
-
-                        //       if (valCode) {
-                        //         var _data =
-                        //             await que.getDataByID("users", sc);
-                        //         var valStatus = await que.getKeyByData(
-                        //             "status", "userID", sc);
-
-                        //         var latest = {
-                        //           "key": "",
-                        //           "timestamp": "0000-00-00 00:00:00"
-                        //         };
-                        //         var ids = await que.getIDs("status");
-
-                        //         for (var i in ids) {
-                        //           var s =
-                        //               await que.getDataByID("status", i);
-                        //           if (latest['timestamp']
-                        //                   .compareTo(s['timestamp']) <
-                        //               0) {
-                        //             latest['timestamp'] = s['timestamp'];
-                        //             latest['key'] = i;
-                        //           }
-                        //         }
-
-                        //         if (valStatus != null &&
-                        //             valStatus != {} &&
-                        //             latest['timestamp'] !=
-                        //                 "0000-00-00 00:00:00") {
-                        //           var data = {
-                        //             "userID": sc,
-                        //             "name": _data['name'],
-                        //             "statusKey": latest['key'],
-                        //             "employee": _user,
-                        //             "timestamp": ti.getTimeStamp()
-                        //           };
-
-                        //           showAlertDialog(context, data);
-                        //         }
-                        //       }
-                        //     },
-                        //   )
-
                         ),
                   ),
                   if (userType.type == "customer")
